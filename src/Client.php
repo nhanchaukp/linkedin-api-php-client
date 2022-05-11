@@ -298,7 +298,7 @@ class Client
                     'x-li-format' => 'json',
                     'Connection' => 'Keep-Alive'
                 ],
-                'verify'=>$this->skipSSL
+                'verify'=>!$this->skipSSL
             ]);
             try {
                 $response = $guzzle->post($uri, ['form_params' => [
@@ -511,7 +511,7 @@ class Client
         $guzzle = new GuzzleClient([
             'base_uri' => $this->getApiRoot(),
             'headers' => $headers,
-            'verify' => $this->skipSSL
+            'verify' => !$this->skipSSL
         ]);
         if (!empty($params) && Method::GET === $method) {
             $endpoint .= '?' . build_query($params);
