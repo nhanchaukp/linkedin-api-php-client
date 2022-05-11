@@ -30,7 +30,7 @@ use LinkedIn\Http\Method;
  */
 class Client
 {
-
+    
     /**
      * Grant type
      */
@@ -40,6 +40,11 @@ class Client
      * Response type
      */
     const OAUTH2_RESPONSE_TYPE = 'code';
+
+    /**
+     * Skip ssl Curl
+     */
+    protected $skipSSL = true;
 
     /**
      * Client Id
@@ -103,6 +108,19 @@ class Client
      * @var bool
      */
     protected $useTokenParam = false;
+
+    /**
+     * Set verify ssl when request
+     *
+     * @param boolean $verify
+     *
+     * @return Client
+     */
+    public function setSkipSSL($verify)
+    {
+        $this->skipSSL = $verify;
+        return $this;
+    }
 
     /**
      * @return bool
@@ -279,7 +297,8 @@ class Client
                     'Content-Type' => 'application/json',
                     'x-li-format' => 'json',
                     'Connection' => 'Keep-Alive'
-                ]
+                ],
+                'verify'=>$this->skipSSL
             ]);
             try {
                 $response = $guzzle->post($uri, ['form_params' => [
@@ -492,6 +511,7 @@ class Client
         $guzzle = new GuzzleClient([
             'base_uri' => $this->getApiRoot(),
             'headers' => $headers,
+            'verify' => $this->skipSSL
         ]);
         if (!empty($params) && Method::GET === $method) {
             $endpoint .= '?' . build_query($params);
@@ -555,7 +575,10 @@ class Client
     {
         $headers = $this->getApiHeaders();
         unset($headers['Content-Type']);
-        if (!$this->isUsingTokenParam()) {
+        //$headers = [];
+        if ($this->isUsingTokenParam()) {
+            //
+        } else {
             $headers['Authorization'] = 'Bearer ' . $this->accessToken->getToken();
         }
         $guzzle = new GuzzleClient([
