@@ -14,7 +14,7 @@ You will need at least PHP 7.3. We match [officially supported](https://www.php.
 Use [composer](https://getcomposer.org/) package manager to install the lastest version of the package:
 
 ```bash
-composer require zoonman/linkedin-api-php-client
+composer require nhanchaukp/linkedin-api-php-client
 ```
 
 Or add this package as dependency to `composer.json`.
@@ -86,12 +86,19 @@ use LinkedIn\Scope;
 
 // define scope
 $scopes = [
-  Scope::READ_LITE_PROFILE, 
+  Scope::READ_LITE_PROFILE,
   Scope::READ_EMAIL_ADDRESS,
   Scope::SHARE_AS_USER,
-  Scope::SHARE_AS_ORGANIZATION,
 ];
 $loginUrl = $client->getLoginUrl($scopes); // get url on LinkedIn to start linking
+```
+
+#### Setting skip SSL when curl error code: 60
+Skip SLL defaul is skiped (true)
+Set a skip ssl:
+
+```php
+$client->setSkipSSL(false);
 ```
 
 Now you can take user to LinkedIn. You can use link or rely on Location HTTP header.
