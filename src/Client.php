@@ -482,7 +482,7 @@ class Client
             $scheme,
             $authority,
             $path,
-            build_query($params),
+            Query::build($params),
             $fragment
         );
         return $uri;
@@ -514,7 +514,7 @@ class Client
             'verify' => !$this->skipSSL
         ]);
         if (!empty($params) && Method::GET === $method) {
-            $endpoint .= '?' . build_query($params);
+            $endpoint .= '?' . Query::build($params);
         }
         try {
             $response = $guzzle->request($method, $endpoint, $options);
